@@ -1,46 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
-import ProductCard, { Product } from "./components/product-card";
-import { Category } from "@/lib/types";
-
-const products: Product[] = [
-  {
-    id: "1",
-    name: "Margarita Pizza",
-    description: "Eco-friendly pizza mat with non-slip surface.",
-    image: "/pizza-main.png",
-    price: 500,
-  },
-  {
-    id: "2",
-    name: "Margarita Pizza",
-    description: "Eco-friendly pizza mat with non-slip surface.",
-    image: "/pizza-main.png",
-    price: 500,
-  },
-  {
-    id: "3",
-    name: "Margarita Pizza",
-    description: "Eco-friendly pizza mat with non-slip surface.",
-    image: "/pizza-main.png",
-    price: 500,
-  },
-  {
-    id: "4",
-    name: "Margarita Pizza",
-    description: "Eco-friendly pizza mat with non-slip surface.",
-    image: "/pizza-main.png",
-    price: 500,
-  },
-  {
-    id: "5",
-    name: "Margarita Pizza",
-    description: "Eco-friendly pizza mat with non-slip surface.",
-    image: "/pizza-main.png",
-    price: 500,
-  },
-];
+import ProductCard from "./components/product-card";
+import { Category, Product } from "@/lib/types";
 
 export default async function Home() {
   const categoryResponse = await fetch(
@@ -57,7 +19,16 @@ export default async function Home() {
 
   const categories: Category[] = await categoryResponse.json();
 
-  console.log("categories", categories);
+  const productsResponse = await fetch(
+    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=2`,
+    {
+      next: {
+        revalidate: 3600, // 1 hour
+      },
+    }
+  );
+
+  const products: { data: Product[] } = await productsResponse.json();
 
   return (
     <>
@@ -102,20 +73,21 @@ export default async function Home() {
                 );
               })}
             </TabsList>
-            <TabsContent value="pizza">
-              <div className="grid grid-cols-4 gap-4 mt-6">
-                {products.map((product) => {
-                  return <ProductCard key={product.id} product={product} />;
-                })}
-              </div>
-            </TabsContent>
-            <TabsContent value="beverages">
-              <div className="grid grid-cols-4 gap-4 mt-6">
-                {products.map((product) => {
-                  return <ProductCard key={product.id} product={product} />;
-                })}
-              </div>
-            </TabsContent>
+            {categories.map((category) => {
+              return (
+                <TabsContent key={category._id} value={category._id}>
+                  <div className="grid grid-cols-4 gap-6 mt-6">
+                    {products.data
+                      .filter(
+                        (product) => product.category._id === category._id
+                      )
+                      .map((product) => (
+                        <ProductCard product={product} key={product._id} />
+                      ))}
+                  </div>
+                </TabsContent>
+              );
+            })}
           </Tabs>
         </div>
       </section>
