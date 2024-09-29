@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, startTransition } from "react";
 import ToppingCard from "./topping-card";
 import { Topping } from "@/lib/types";
 
@@ -23,13 +23,15 @@ const ToppingList = () => {
     const isAlreadyExists = selectedToppings.some(
       (element: Topping) => element.id === topping.id
     );
-    if (isAlreadyExists) {
-      setSelectedToppings((prev) =>
-        prev.filter((elm: Topping) => elm.id !== topping.id)
-      );
-      return;
-    }
-    setSelectedToppings((prev: Topping[]) => [...prev, topping]);
+    startTransition(() => {
+      if (isAlreadyExists) {
+        setSelectedToppings((prev) =>
+          prev.filter((elm: Topping) => elm.id !== topping.id)
+        );
+        return;
+      }
+      setSelectedToppings((prev: Topping[]) => [...prev, topping]);
+    });
   };
 
   return (
