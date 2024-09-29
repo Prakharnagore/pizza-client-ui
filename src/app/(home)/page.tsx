@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ProductList from "./components/product-list";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 
 export default async function Home() {
   return (
-    <>
+    <Fragment>
       <section className="bg-white">
         <div className="container flex items-center justify-between py-24">
           <div>
@@ -33,6 +33,6 @@ export default async function Home() {
       <Suspense fallback={"Loading..."}>
         <ProductList />
       </Suspense>
-    </>
+    </Fragment>
   );
 }

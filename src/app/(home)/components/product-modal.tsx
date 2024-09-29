@@ -7,7 +7,7 @@ import ToppingList from "./topping-list";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
-import { Product } from "@/lib/types";
+import { Product, Topping } from "@/lib/types";
 import { startTransition, Suspense, useState } from "react";
 
 type ChosenConfig = {
@@ -16,9 +16,25 @@ type ChosenConfig = {
 
 const ProductModal = ({ product }: { product: Product }) => {
   const [chosenConfig, setChosenConfig] = useState<ChosenConfig>({});
+  const [selectedToppings, setSelectedToppings] = useState<Topping[]>([]);
+
+  const handleCheckBoxCheck = (topping: Topping) => {
+    const isAlreadyExists = selectedToppings.some(
+      (element: Topping) => element.id === topping.id
+    );
+    startTransition(() => {
+      if (isAlreadyExists) {
+        setSelectedToppings((prev) =>
+          prev.filter((elm: Topping) => elm.id !== topping.id)
+        );
+        return;
+      }
+      setSelectedToppings((prev: Topping[]) => [...prev, topping]);
+    });
+  };
 
   const handleAddToCart = () => {
-    console.log("adding to cart");
+    console.log("adding to cart", chosenConfig);
   };
 
   const handleRadioChange = (key: string, data: string) => {
@@ -89,7 +105,10 @@ const ProductModal = ({ product }: { product: Product }) => {
               }
             )}
             <Suspense fallback={"Loading..."}>
-              <ToppingList />
+              <ToppingList
+                selectedToppings={selectedToppings}
+                handleCheckBoxCheck={handleCheckBoxCheck}
+              />
             </Suspense>
             <div className="flex items-center justify-between mt-12">
               <span className="font-bold">₹{1200}</span>
