@@ -8,11 +8,31 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { Product } from "@/lib/types";
-import { Suspense } from "react";
+import { startTransition, Suspense, useState } from "react";
+
+type ChosenConfig = {
+  [key: string]: string;
+};
 
 const ProductModal = ({ product }: { product: Product }) => {
+  const [chosenConfig, setChosenConfig] = useState<ChosenConfig>({});
+
   const handleAddToCart = () => {
     console.log("adding to cart");
+  };
+
+  const handleRadioChange = (key: string, data: string) => {
+    /**
+          {
+            Size: "Medium",
+            Crust: "Thin"
+        }
+         */
+    startTransition(() => {
+      setChosenConfig((prev) => {
+        return { ...prev, [key]: data };
+      });
+    });
   };
 
   return (
@@ -41,6 +61,9 @@ const ProductModal = ({ product }: { product: Product }) => {
                     <RadioGroup
                       defaultValue={value.availableOptions[0]}
                       className="grid grid-cols-3 gap-4 mt-2"
+                      onValueChange={(data) => {
+                        handleRadioChange(key, data);
+                      }}
                     >
                       {value.availableOptions.map((option) => {
                         return (
