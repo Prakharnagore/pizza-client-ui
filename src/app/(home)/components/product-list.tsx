@@ -3,9 +3,13 @@ import React from "react";
 import ProductCard from "./product-card";
 import { Category, Product } from "@/lib/types";
 
-const ProductList = async () => {
+const ProductList = async ({
+  searchParams,
+}: {
+  searchParams: { restaurantId: string };
+}) => {
   const categoryResponse = await fetch(
-    `${process.env.BACKEND_URL}/api/catalog/categories?tenantId=1`,
+    `${process.env.BACKEND_URL}/api/catalog/categories`,
     {
       next: {
         revalidate: 3600, // 1 hour
@@ -19,7 +23,7 @@ const ProductList = async () => {
   const categories: Category[] = await categoryResponse.json();
 
   const productsResponse = await fetch(
-    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=1`,
+    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=${searchParams.restaurantId}`,
     {
       next: {
         revalidate: 3600, // 1 hour
@@ -28,7 +32,6 @@ const ProductList = async () => {
   );
 
   const products: { data: Product[] } = await productsResponse.json();
-
   return (
     <section>
       <div className="container py-12">

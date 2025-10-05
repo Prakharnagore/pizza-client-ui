@@ -1,11 +1,15 @@
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import ProductList from "./components/product-list";
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { restaurantId: string };
+}) {
   return (
-    <Fragment>
+    <>
       <section className="bg-white">
         <div className="container flex items-center justify-between py-24">
           <div>
@@ -30,9 +34,10 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <Suspense fallback={"Loading..."}>
-        <ProductList />
+      {/* todo: add skeleton component */}
+      <Suspense fallback={"Loading...."}>
+        <ProductList searchParams={searchParams} />
       </Suspense>
-    </Fragment>
+    </>
   );
 }
