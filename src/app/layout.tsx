@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/custom/header";
 import StoreProvider from "./StoreProvider";
 import { Toaster } from "@/components/ui/toaster";
+import Refresher from "@/components/custom/refresher";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -30,9 +31,11 @@ export default function RootLayout({
             manrope.variable
           )}
         >
-          <Header />
-          <main>{children}</main>
-          <Toaster />
+          <Refresher>
+            <Header />
+            <main>{children}</main>
+            <Toaster />
+          </Refresher>
         </body>
       </StoreProvider>
     </html>
