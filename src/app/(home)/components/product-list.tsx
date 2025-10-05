@@ -5,7 +5,7 @@ import { Category, Product } from "@/lib/types";
 
 const ProductList = async () => {
   const categoryResponse = await fetch(
-    `${process.env.BACKEND_URL}/api/catalog/categories`,
+    `${process.env.BACKEND_URL}/api/catalog/categories?tenantId=1`,
     {
       next: {
         revalidate: 3600, // 1 hour
@@ -19,7 +19,7 @@ const ProductList = async () => {
   const categories: Category[] = await categoryResponse.json();
 
   const productsResponse = await fetch(
-    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=2`,
+    `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=1`,
     {
       next: {
         revalidate: 3600, // 1 hour
