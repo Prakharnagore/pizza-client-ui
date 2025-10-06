@@ -57,3 +57,8 @@ export type Topping = {
   price: number;
   image: string;
 };
+
+export type CouponCodeData = {
+  code: string;
+  tenantId: string;
+};
