@@ -22,6 +22,11 @@ const CustomerForm = () => {
     },
   });
 
+  if (isLoading) {
+    // todo: use Spinner/Loader or Shadcn Skeleton
+    return <h3>Loading...</h3>;
+  }
+
   return (
     <div className="flex container gap-6 mt-16">
       <Card className="w-3/5 border-none">
@@ -64,7 +69,7 @@ const CustomerForm = () => {
               <div>
                 <div className="flex items-center justify-between">
                   <Label htmlFor="name">Address</Label>
-                  <AddAdress customerId="mock-id" />
+                  <AddAdress customerId={customer?._id} />
                 </div>
 
                 <RadioGroup className="grid grid-cols-2 gap-6 mt-2">
