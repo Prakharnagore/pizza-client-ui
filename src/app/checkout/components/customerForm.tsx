@@ -10,18 +10,17 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import AddAdress from "./addAddress";
 import OrderSummary from "./orderSummary";
 import { Textarea } from "@/components/ui/textarea";
+import { useQuery } from "@tanstack/react-query";
+import { getCustomer } from "@/lib/http/api";
+import { Customer } from "@/lib/types";
 
 const CustomerForm = () => {
-  // Mock data for UI display
-  const customer = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    addresses: [
-      { text: "123 Main St, City, State 12345" },
-      { text: "456 Oak Ave, City, State 67890" },
-    ],
-  };
+  const { data: customer, isLoading } = useQuery<Customer>({
+    queryKey: ["customer"],
+    queryFn: async () => {
+      return await getCustomer().then((res) => res.data);
+    },
+  });
 
   return (
     <div className="flex container gap-6 mt-16">
@@ -37,7 +36,7 @@ const CustomerForm = () => {
                 id="fname"
                 type="text"
                 className="w-full"
-                defaultValue={customer.firstName}
+                defaultValue={customer?.firstName}
                 disabled
               />
             </div>
@@ -47,7 +46,7 @@ const CustomerForm = () => {
                 id="lname"
                 type="text"
                 className="w-full"
-                defaultValue={customer.lastName}
+                defaultValue={customer?.lastName}
                 disabled
               />
             </div>
@@ -57,7 +56,7 @@ const CustomerForm = () => {
                 id="email"
                 type="text"
                 className="w-full"
-                defaultValue={customer.email}
+                defaultValue={customer?.email}
                 disabled
               />
             </div>
@@ -69,7 +68,7 @@ const CustomerForm = () => {
                 </div>
 
                 <RadioGroup className="grid grid-cols-2 gap-6 mt-2">
-                  {customer.addresses.map((address) => {
+                  {customer?.addresses.map((address) => {
                     return (
                       <Card className="p-6" key={address.text}>
                         <div className="flex items-center space-x-2">
