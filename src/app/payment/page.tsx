@@ -70,11 +70,11 @@ const Payment = ({
                 </Link>
               </div>
 
-              <div className="flex items-center gap-2 mt-2">
+              {/* <div className="flex items-center gap-2 mt-2">
                 <LayoutDashboard size={20} />
                 <h2 className="text-base font-medium">Payment status: </h2>
                 <span>Paid</span>
-              </div>
+              </div> */}
             </CardContent>
           </Card>
         )}
