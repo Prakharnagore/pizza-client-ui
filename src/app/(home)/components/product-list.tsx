@@ -16,11 +16,14 @@ const ProductList = async ({
       },
     }
   );
+
   if (!categoryResponse.ok) {
     throw new Error("Failed to fetch categories");
   }
 
   const categories: Category[] = await categoryResponse.json();
+
+  console.log("categories", categories);
 
   const productsResponse = await fetch(
     `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=${searchParams.restaurantId}`,

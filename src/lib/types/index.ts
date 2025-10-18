@@ -1,3 +1,5 @@
+import { CartItem } from "../store/features/cart/cartSlice";
+
 export interface Tenant {
   id: string;
   name: string;
@@ -25,6 +27,11 @@ export interface Category {
   attributes: Attribute[];
 }
 
+export type ProductAttribute = {
+  name: string;
+  value: string | boolean;
+};
+
 export interface ProductPriceConfiguration {
   [key: string]: {
     priceType: "base" | "aditional";
@@ -33,11 +40,6 @@ export interface ProductPriceConfiguration {
     };
   };
 }
-
-export type ProductAttribute = {
-  name: string;
-  value: string | boolean;
-};
 
 export type Product = {
   _id: string;
@@ -58,11 +60,6 @@ export type Topping = {
   image: string;
 };
 
-export type CouponCodeData = {
-  code: string;
-  tenantId: string;
-};
-
 export type Address = {
   text: string;
   isDefault: boolean;
@@ -75,3 +72,34 @@ export type Customer = {
   email: string;
   addresses: Address[];
 };
+
+export type CouponCodeData = {
+  code: string;
+  tenantId: string;
+};
+
+export type OrderData = {
+  cart: CartItem[];
+  couponCode: string;
+  tenantId: string;
+  customerId: string;
+  comment: string;
+  address: string;
+  paymentMode: string;
+};
+
+export interface Order {
+  _id: string;
+  customerId: Customer;
+  total: number;
+  discount: number;
+  taxes: number;
+  deliveryCharges: number;
+  address: string;
+  tenantId: string;
+  comment?: string;
+  paymentMode: string;
+  orderStatus: string;
+  paymentStatus: string;
+  createdAt: string;
+}
